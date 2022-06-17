@@ -1,11 +1,20 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'upload-file-to-supabase-storage'
+description: 'Upload local file to Supabase Storage'
+author: 'StatusBase by Zernonia'
+branding:
+  icon: 'image'
+  color: 'blue'
+
 inputs:
-  milliseconds: # change this
+  bucket:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Name of the bucket to upload to'
+    default: ''
+
+outputs:
+  result:
+    description: 'Media Key for the image'
+
 runs:
   using: 'node16'
   main: 'dist/index.js'
