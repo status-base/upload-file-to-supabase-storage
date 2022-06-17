@@ -38,9 +38,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const supabase_js_1 = __nccwpck_require__(1206);
 const fs_1 = __nccwpck_require__(5747);
-const PATH = process.env.GITHUB_WORKSPACE
-    ? `${process.env.GITHUB_WORKSPACE}/screenshots/`
-    : `screenshots/`;
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -48,6 +45,10 @@ function run() {
             const contentType = core.getInput('content_type');
             const cacheControl = core.getInput('cache_control');
             const upsert = core.getInput('upsert') === 'true';
+            const fileDir = core.getInput('file_directory');
+            const PATH = process.env.GITHUB_WORKSPACE
+                ? `${process.env.GITHUB_WORKSPACE}/${fileDir}/`
+                : `${fileDir}/`;
             const supabaseUrl = process.env.SUPABASE_URL;
             const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
             if (!supabaseUrl || !supabaseAnonKey) {

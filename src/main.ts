@@ -2,16 +2,17 @@ import * as core from '@actions/core'
 import {createClient} from '@supabase/supabase-js'
 import {promises as fs} from 'fs'
 
-const PATH = process.env.GITHUB_WORKSPACE
-  ? `${process.env.GITHUB_WORKSPACE}/screenshots/`
-  : `screenshots/`
-
 async function run(): Promise<void> {
   try {
     const bucket = core.getInput('bucket')
     const contentType = core.getInput('content_type')
     const cacheControl = core.getInput('cache_control')
     const upsert = core.getInput('upsert') === 'true'
+    const fileDir = core.getInput('file_directory')
+
+    const PATH = process.env.GITHUB_WORKSPACE
+      ? `${process.env.GITHUB_WORKSPACE}/${fileDir}/`
+      : `${fileDir}/`
 
     const supabaseUrl = process.env.SUPABASE_URL
     const supabaseAnonKey = process.env.SUPABASE_ANON_KEY

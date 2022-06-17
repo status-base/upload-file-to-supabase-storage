@@ -6,6 +6,10 @@ branding:
   color: 'blue'
 
 inputs:
+  file_directory:
+    required: true
+    description: 'Directory which the files located'
+    default: 'screenshots'
   bucket:
     required: true
     description: 'Name of the bucket to upload to'
