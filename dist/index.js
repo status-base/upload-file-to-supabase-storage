@@ -58,7 +58,7 @@ function run() {
             // eslint-disable-next-line @typescript-eslint/prefer-for-of
             for (let i = 0; i < files.length; i++) {
                 const filename = files[i];
-                const buffer = yield fs_1.promises.readFile(filename);
+                const buffer = yield fs_1.promises.readFile(`${PATH}/${filename}`);
                 const { data, error } = yield supabase.storage
                     .from(bucket)
                     .upload(filename, buffer, {

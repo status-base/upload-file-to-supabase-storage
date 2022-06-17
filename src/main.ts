@@ -25,7 +25,7 @@ async function run(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < files.length; i++) {
       const filename = files[i]
-      const buffer = await fs.readFile(filename)
+      const buffer = await fs.readFile(`${PATH}/${filename}`)
 
       const {data, error} = await supabase.storage
         .from(bucket)
