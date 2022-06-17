@@ -12,16 +12,14 @@ async function run(): Promise<void> {
     const supabaseUrl = process.env.SUPABASE_URL
     const supabaseAnonKey = process.env.SUPABASE_ANON_KEY
     if (!supabaseUrl || !supabaseAnonKey) {
-      core.setOutput('result', 'No videos or screenshots found!')
-      return
+      throw new Error('No supabase url or anon key is found!')
     }
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
     const files = await fs.readdir(PATH)
     if (!files.length) {
-      core.setOutput('result', 'No videos or screenshots found!')
-      return
+      throw new Error('No videos or screenshots found!')
     }
 
     // eslint-disable-next-line @typescript-eslint/prefer-for-of

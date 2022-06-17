@@ -48,14 +48,12 @@ function run() {
             const supabaseUrl = process.env.SUPABASE_URL;
             const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
             if (!supabaseUrl || !supabaseAnonKey) {
-                core.setOutput('result', 'No videos or screenshots found!');
-                return;
+                throw new Error('No supabase url or anon key is found!');
             }
             const supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseAnonKey);
             const files = yield fs_1.promises.readdir(PATH);
             if (!files.length) {
-                core.setOutput('result', 'No videos or screenshots found!');
-                return;
+                throw new Error('No videos or screenshots found!');
             }
             // eslint-disable-next-line @typescript-eslint/prefer-for-of
             for (let i = 0; i < files.length; i++) {

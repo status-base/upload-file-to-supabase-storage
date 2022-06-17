@@ -1,6 +1,6 @@
 {
   "name": "upload-to-supabase-storage",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "description": "Upload local file to Supabase Storage",
   "main": "lib/main.js",
