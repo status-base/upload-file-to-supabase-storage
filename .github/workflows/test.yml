@@ -1,5 +1,5 @@
-name: 'build-test'
-on: # rebuild any PRs and main branch changes
+name: 'units-test'
+on:
   pull_request:
   push:
     branches:
@@ -11,23 +11,14 @@ jobs:
   units:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: npm ci --force
 
   # test action works running from the graph
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: install puppeteer-headful
-        uses: mujo-code/puppeteer-headful@master
-        env:
-          CI: 'true'
-      - uses: flameddd/screenshots-ci-action@v1.1.1
-      - name: screenshots-ci-action
-        with:
-          url: https://github.com
+      - uses: actions/checkout@v3
       - uses: ./
-      - name: upload-images-to-supabase-storage
         with:
-          bucket: website
+          bucket: 'website'
