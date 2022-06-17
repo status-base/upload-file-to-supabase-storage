@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {basename} from 'path'
+import {basename, isAbsolute} from 'path'
 import {createClient} from '@supabase/supabase-js'
 import {promises as fs} from 'fs'
 
@@ -20,8 +20,13 @@ async function run(): Promise<void> {
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+    const filePathDir = isAbsolute(filePath)
+      ? filePath
+      : `${process.env.GITHUB_WORKSPACE}/${filePath}`
     core.debug(`Reading file: ${filePath}`)
-    const buffer = await fs.readFile(filePath)
+    core.debug(`Reading file dir: ${filePathDir}`)
+
+    const buffer = await fs.readFile(filePathDir)
 
     const {data, error} = await supabase.storage
       .from(bucket)

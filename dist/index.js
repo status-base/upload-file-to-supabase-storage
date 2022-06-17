@@ -36,6 +36,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
+const path_1 = __nccwpck_require__(5622);
 const supabase_js_1 = __nccwpck_require__(1206);
 const fs_1 = __nccwpck_require__(5747);
 function run() {
@@ -45,31 +46,29 @@ function run() {
             const contentType = core.getInput('content_type');
             const cacheControl = core.getInput('cache_control');
             const upsert = core.getInput('upsert') === 'true';
-            const fileName = core.getInput('file_name');
-            const fileDir = core.getInput('file_directory');
-            const PATH = process.env.GITHUB_WORKSPACE
-                ? `${process.env.GITHUB_WORKSPACE}/${fileDir !== '' ? `${fileDir}/` : ''}`
-                : `${fileDir !== '' ? `${fileDir}/` : ''}`;
+            const filePath = core.getInput('file_path');
             const supabaseUrl = process.env.SUPABASE_URL;
             const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
             if (!supabaseUrl || !supabaseAnonKey) {
                 throw new Error('No supabase url or anon key is found!');
             }
             const supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseAnonKey);
-            const files = yield fs_1.promises.readdir(PATH);
-            if (!files.length) {
-                throw new Error('No videos or screenshots found!');
-            }
-            const buffer = yield fs_1.promises.readFile(`${PATH}/${fileName}`);
+            const filePathDir = (0, path_1.isAbsolute)(filePath)
+                ? filePath
+                : `${process.env.GITHUB_WORKSPACE}/${filePath}`;
+            core.debug(`Reading file: ${filePath}`);
+            core.debug(`Reading file dir: ${filePathDir}`);
+            const buffer = yield fs_1.promises.readFile(filePathDir);
             const { data, error } = yield supabase.storage
                 .from(bucket)
-                .upload(fileName, buffer, {
+                .upload((0, path_1.basename)(filePath), buffer, {
                 contentType,
                 cacheControl,
                 upsert
             });
             if (error)
                 throw new Error(error.message);
+            core.debug(`Media Key: ${data === null || data === void 0 ? void 0 : data.Key}`);
             core.setOutput('result', data === null || data === void 0 ? void 0 : data.Key);
         }
         catch (error) {
