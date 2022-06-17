@@ -23,9 +23,11 @@ jobs:
         uses: mujo-code/puppeteer-headful@master
         env:
           CI: 'true'
+      - name: screenshots-ci-action
       - uses: flameddd/screenshots-ci-action@v1.1.1
         with:
           url: https://github.com
+      - name: upload-images-to-supabase-storage
       - uses: ./
         with:
           bucket: website
