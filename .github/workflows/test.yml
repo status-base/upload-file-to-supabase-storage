@@ -19,6 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./dist/index.js
+      - uses: ./
         with:
           bucket: 'website'

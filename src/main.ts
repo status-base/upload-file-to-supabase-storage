@@ -1,4 +1,4 @@
-import core from '@actions/core'
+import * as core from '@actions/core'
 import {createClient} from '@supabase/supabase-js'
 import {promises as fs} from 'fs'
 
