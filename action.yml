@@ -10,6 +10,18 @@ inputs:
     required: true
     description: 'Name of the bucket to upload to'
     default: ''
+  content_type:
+    required: true
+    description: 'Content-Type header value'
+    default: 'image/jpeg'
+  cache_control:
+    required: true
+    description: 'Cache-control: max-age=<seconds>'
+    default: '3600'
+  upsert:
+    required: true
+    description: 'Replace the file with the same name or not'
+    default: 'false'
 
 outputs:
   result:

@@ -9,8 +9,13 @@ const PATH = process.env.GITHUB_WORKSPACE
 async function run(): Promise<void> {
   try {
     const bucket = core.getInput('bucket')
+    const contentType = core.getInput('content_type')
+    const cacheControl = core.getInput('cache_control')
+    const upsert = core.getInput('upsert') === 'true'
+
     const supabaseUrl = process.env.SUPABASE_URL
     const supabaseAnonKey = process.env.SUPABASE_ANON_KEY
+
     if (!supabaseUrl || !supabaseAnonKey) {
       throw new Error('No supabase url or anon key is found!')
     }
@@ -30,7 +35,9 @@ async function run(): Promise<void> {
       const {data, error} = await supabase.storage
         .from(bucket)
         .upload(filename, buffer, {
-          contentType: 'image/jpeg'
+          contentType,
+          cacheControl,
+          upsert
         })
 
       if (error) throw new Error(error.message)
