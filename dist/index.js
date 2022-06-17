@@ -45,10 +45,11 @@ function run() {
             const contentType = core.getInput('content_type');
             const cacheControl = core.getInput('cache_control');
             const upsert = core.getInput('upsert') === 'true';
+            const fileName = core.getInput('file_name');
             const fileDir = core.getInput('file_directory');
             const PATH = process.env.GITHUB_WORKSPACE
-                ? `${process.env.GITHUB_WORKSPACE}/${fileDir}/`
-                : `${fileDir}/`;
+                ? `${process.env.GITHUB_WORKSPACE}/${fileDir !== '' ? `${fileDir}/` : ''}`
+                : `${fileDir !== '' ? `${fileDir}/` : ''}`;
             const supabaseUrl = process.env.SUPABASE_URL;
             const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
             if (!supabaseUrl || !supabaseAnonKey) {
@@ -59,21 +60,17 @@ function run() {
             if (!files.length) {
                 throw new Error('No videos or screenshots found!');
             }
-            // eslint-disable-next-line @typescript-eslint/prefer-for-of
-            for (let i = 0; i < files.length; i++) {
-                const filename = files[i];
-                const buffer = yield fs_1.promises.readFile(`${PATH}/${filename}`);
-                const { data, error } = yield supabase.storage
-                    .from(bucket)
-                    .upload(filename, buffer, {
-                    contentType,
-                    cacheControl,
-                    upsert
-                });
-                if (error)
-                    throw new Error(error.message);
-                core.setOutput('result', data === null || data === void 0 ? void 0 : data.Key);
-            }
+            const buffer = yield fs_1.promises.readFile(`${PATH}/${fileName}`);
+            const { data, error } = yield supabase.storage
+                .from(bucket)
+                .upload(fileName, buffer, {
+                contentType,
+                cacheControl,
+                upsert
+            });
+            if (error)
+                throw new Error(error.message);
+            core.setOutput('result', data === null || data === void 0 ? void 0 : data.Key);
         }
         catch (error) {
             if (error instanceof Error)

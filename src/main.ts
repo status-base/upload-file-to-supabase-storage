@@ -8,11 +8,12 @@ async function run(): Promise<void> {
     const contentType = core.getInput('content_type')
     const cacheControl = core.getInput('cache_control')
     const upsert = core.getInput('upsert') === 'true'
+    const fileName = core.getInput('file_name')
     const fileDir = core.getInput('file_directory')
 
     const PATH = process.env.GITHUB_WORKSPACE
-      ? `${process.env.GITHUB_WORKSPACE}/${fileDir}/`
-      : `${fileDir}/`
+      ? `${process.env.GITHUB_WORKSPACE}/${fileDir !== '' ? `${fileDir}/` : ''}`
+      : `${fileDir !== '' ? `${fileDir}/` : ''}`
 
     const supabaseUrl = process.env.SUPABASE_URL
     const supabaseAnonKey = process.env.SUPABASE_ANON_KEY
@@ -28,22 +29,18 @@ async function run(): Promise<void> {
       throw new Error('No videos or screenshots found!')
     }
 
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < files.length; i++) {
-      const filename = files[i]
-      const buffer = await fs.readFile(`${PATH}/${filename}`)
+    const buffer = await fs.readFile(`${PATH}/${fileName}`)
 
-      const {data, error} = await supabase.storage
-        .from(bucket)
-        .upload(filename, buffer, {
-          contentType,
-          cacheControl,
-          upsert
-        })
+    const {data, error} = await supabase.storage
+      .from(bucket)
+      .upload(fileName, buffer, {
+        contentType,
+        cacheControl,
+        upsert
+      })
 
-      if (error) throw new Error(error.message)
-      core.setOutput('result', data?.Key)
-    }
+    if (error) throw new Error(error.message)
+    core.setOutput('result', data?.Key)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
