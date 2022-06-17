@@ -26,6 +26,6 @@ jobs:
       - uses: ./
         with:
           file_name: 'desktop1200x900.jpeg'
-          file_directory: 'screenshots'
+          file_directory: ''
           bucket: 'website'
           upsert: 'true'
