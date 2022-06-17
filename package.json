@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "upload-to-supabase-storage",
+  "version": "0.0.2",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Upload local file to Supabase Storage",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -22,7 +22,7 @@
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "zernonia",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.6.0",
