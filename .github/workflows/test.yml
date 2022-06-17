@@ -7,18 +7,25 @@ on: # rebuild any PRs and main branch changes
       - 'releases/*'
 
 jobs:
-  build: # make sure build/ci work properly
+  # unit tests
+  units:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          npm install --force
-      - run: |
-          npm run all
-  test: # make sure the action works on a clean machine without building
+      - run: npm ci --force
+
+  # test action works running from the graph
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: install puppeteer-headful
+        uses: mujo-code/puppeteer-headful@master
+        env:
+          CI: 'true'
+      - uses: flameddd/screenshots-ci-action@v1.1.1
+        with:
+          url: https://github.com
       - uses: ./
         with:
-          bucket: 'website'
+          bucket: website
