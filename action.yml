@@ -6,13 +6,9 @@ branding:
   color: 'blue'
 
 inputs:
-  file_name:
+  file_path:
     required: true
-    description: 'Name of the file to be uploaded'
-  file_directory:
-    required: true
-    description: 'Directory which the files located'
-    default: ''
+    description: 'Path name of the file to be uploaded (eg: /screenshots.png)'
   bucket:
     required: true
     description: 'Name of the bucket to upload to'

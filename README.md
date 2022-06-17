@@ -10,7 +10,7 @@ You may want to perform some screenshot, or generate txt file and store those da
 
 ### `bucket`
 
-### `file_directory`
+### `file_path`
 
 ### `content_type`
 

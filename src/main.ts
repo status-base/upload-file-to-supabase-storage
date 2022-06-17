@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import {basename} from 'path'
 import {createClient} from '@supabase/supabase-js'
 import {promises as fs} from 'fs'
 
@@ -8,12 +9,7 @@ async function run(): Promise<void> {
     const contentType = core.getInput('content_type')
     const cacheControl = core.getInput('cache_control')
     const upsert = core.getInput('upsert') === 'true'
-    const fileName = core.getInput('file_name')
-    const fileDir = core.getInput('file_directory')
-
-    const PATH = process.env.GITHUB_WORKSPACE
-      ? `${process.env.GITHUB_WORKSPACE}/${fileDir !== '' ? `${fileDir}/` : ''}`
-      : `${fileDir !== '' ? `${fileDir}/` : ''}`
+    const filePath = core.getInput('file_path')
 
     const supabaseUrl = process.env.SUPABASE_URL
     const supabaseAnonKey = process.env.SUPABASE_ANON_KEY
@@ -24,22 +20,19 @@ async function run(): Promise<void> {
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-    const files = await fs.readdir(PATH)
-    if (!files.length) {
-      throw new Error('No videos or screenshots found!')
-    }
-
-    const buffer = await fs.readFile(`${PATH}/${fileName}`)
+    core.debug(`Reading file: ${filePath}`)
+    const buffer = await fs.readFile(filePath)
 
     const {data, error} = await supabase.storage
       .from(bucket)
-      .upload(fileName, buffer, {
+      .upload(basename(filePath), buffer, {
         contentType,
         cacheControl,
         upsert
       })
 
     if (error) throw new Error(error.message)
+    core.debug(`Media Key: ${data?.Key}`)
     core.setOutput('result', data?.Key)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
