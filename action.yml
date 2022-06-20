@@ -1,5 +1,5 @@
-name: 'upload-file-to-supabase-storage'
-description: 'Upload local file to Supabase Storage'
+name: 'Upload file to Supabase Storage'
+description: 'Upload file to Supabase Storage with GitHub Actions'
 author: 'StatusBase by Zernonia'
 branding:
   icon: 'image'
